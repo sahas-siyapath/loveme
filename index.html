@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Love Test ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px 25px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            max-width: 380px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: floatCard 3s ease-in-out infinite;
+        }
+
+        @keyframes floatCard {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.01); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+
+        .panda {
+            font-size: 70px;
+            margin-bottom: 12px;
+            animation: bouncePanda 1.5s infinite alternate;
+        }
+
+        @keyframes bouncePanda {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 20px;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 26px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 22px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: scale(1.08);
+        }
+
+        button:active {
+            transform: scale(0.92);
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        #noBtn {
+            background-color: #adb5bd;
+            color: white;
+        }
+
+        /* Planet Icons Grid */
+        .planets-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .planet-card {
+            background: #fff;
+            border: 2px solid #ff4d6d;
+            border-radius: 16px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 34px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .planet-card:hover {
+            transform: scale(1.12);
+            background: #ffe3e8;
+        }
+
+        /* Tear Drop Style */
+        .tear {
+            position: absolute;
+            color: #3a86ff;
+            font-size: 18px;
+            z-index: 5;
+            user-select: none;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff4d6d;
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .success-screen h2 {
+            font-size: 34px;
+            margin: 0;
+            z-index: 20;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            animation: bouncePanda 1s infinite alternate;
+        }
+
+        .pile-heart {
+            position: absolute;
+            color: #fff;
+            font-size: 25px;
+            z-index: 5;
+            user-select: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainCard">
+        <div class="panda" id="pandaEmoji">🐼</div>
+        <h1 id="questionText">Do you love me? 🥺</h1>
+        <div class="buttons" id="actionArea">
+            <button id="noBtn" onclick="handleNo()">No 😢</button>
+        </div>
+    </div>
+
+    <div class="success-screen" id="successScreen">
+        <h2>I LOVE YOU BABEZZZ ❤️✨</h2>
+        <p style="font-size: 18px; margin-top: 10px; z-index: 20;">Forever & Always! 🥰</p>
+    </div>
+
+    <script>
+        const questionText = document.getElementById('questionText');
+        const actionArea = document.getElementById('actionArea');
+        const pandaEmoji = document.getElementById('pandaEmoji');
+        const mainCard = document.getElementById('mainCard');
+        const successScreen = document.getElementById('successScreen');
+        
+        let tearInterval;
+        let heartInterval;
+
+        function handleNo() {
+            pandaEmoji.innerHTML = "🐼💧";
+            // Deweni screen eke English walin ahanawa
+            questionText.innerHTML = "Are you lying? You really love me, right? 🤔";
+            
+            actionArea.innerHTML = `
+                <button id="yesBtn" onclick="handleYes()">Yes ❤️</button>
+                <button id="noBtn" onclick="handleNo()">No 😢</button>
+            `;
+            
+            startTears();
+        }
+
+        function startTears() {
+            stopTears();
+            tearInterval = setInterval(() => {
+                const tear = document.createElement('div');
+                tear.classList.add('tear');
+                tear.innerHTML = '💧';
+                
+                const randomX = Math.random() * window.innerWidth;
+                let currentY = -20;
+                tear.style.left = randomX + 'px';
+                tear.style.top = currentY + 'px';
+                
+                document.body.appendChild(tear);
+
+                let fall = setInterval(() => {
+                    currentY += 10;
+                    tear.style.top = currentY + 'px';
+                    if (currentY > window.innerHeight) {
+                        clearInterval(fall);
+                        tear.remove();
+                    }
+                }, 40);
+            }, 150);
+        }
+
+        function stopTears() {
+            if (tearInterval) clearInterval(tearInterval);
+            document.querySelectorAll('.tear').forEach(t => t.remove());
+        }
+
+        function handleYes() {
+            stopTears();
+            pandaEmoji.innerHTML = "🐼✨";
+            questionText.innerHTML = "How much do you love me? 🥺❤️";
+            
+            actionArea.innerHTML = `
+                <div class="planets-grid">
+                    <div class="planet-card" onclick="checkSelection('wrong')">🔴</div>
+                    <div class="planet-card" onclick="checkSelection('sun')">☀️</div>
+                    <div class="planet-card" onclick="checkSelection('wrong')">🪐</div>
+                    <div class="planet-card" onclick="checkSelection('wrong')">🌍</div>
+                </div>
+            `;
+        }
+
+        function checkSelection(type) {
+            if (type === 'sun') {
+                stopTears();
+                mainCard.style.display = 'none';
+                successScreen.style.display = 'flex';
+                startAccumulatingHearts();
+            } else {
+                pandaEmoji.innerHTML = "🐼💧";
+                questionText.innerHTML = "Oya mata mechcharada adare? 🥺";
+                
+                actionArea.innerHTML = `
+                    <button id="yesBtn" onclick="handleWrongYes()">Yes 😢</button>
+                    <button id="noBtn" onclick="handleYes()">No 🔄</button>
+                `;
+                
+                startTears();
+            }
+        }
+
+        function handleWrongYes() {
+            stopTears();
+            pandaEmoji.innerHTML = "🐼😭";
+            questionText.innerHTML = "Okey... 💔";
+            
+            actionArea.innerHTML = `
+                <button id="noBtn" onclick="handleNo()">Continue 💧</button>
+            `;
+            
+            startTears();
+        }
+
+        function startAccumulatingHearts() {
+            let bottomOffset = 20;
+
+            heartInterval = setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('pile-heart');
+                heart.innerHTML = '❤️';
+                
+                const randomX = Math.random() * (window.innerWidth - 40);
+                let currentY = -30;
+                let targetY = window.innerHeight - bottomOffset;
+
+                heart.style.left = randomX + 'px';
+                heart.style.top = currentY + 'px';
+                
+                successScreen.appendChild(heart);
+
+                let fall = setInterval(() => {
+                    currentY += 15;
+                    heart.style.top = currentY + 'px';
+                    
+                    if (currentY >= targetY) {
+                        clearInterval(fall);
+                        heart.style.top = targetY + 'px';
+                    }
+                }, 30);
+
+                if (bottomOffset < window.innerHeight * 0.75) {
+                    bottomOffset += 0.5;
+                }
+            }, 120);
+        }
+    </script>
+</body>
+</html>
